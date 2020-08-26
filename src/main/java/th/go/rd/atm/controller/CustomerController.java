@@ -5,10 +5,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import th.go.rd.atm.model.Customer;
+import th.go.rd.atm.service.CustomerService;
 
-import java.util.ArrayList;
 
 @Controller
+@RequestMapping("/customer") //path url name
 public class CustomerController {
     private CustomerService customerService;
 
@@ -16,14 +19,14 @@ public class CustomerController {
         this.customerService =customerService;
     }
 
-    @GetMapping("/customer") //path url name
+    @GetMapping
     public String getCustomerPage(Model model){
 
         model.addAttribute("allCustomers",customerService.getCustomers());
         return "customer"; //return file customer.html
     }
 
-    @PostMapping("/customer")
+    @PostMapping
     public String registerCustomer(@ModelAttribute Customer customer, Model model) {
         customerService.createCustomer(customer);
         model.addAttribute("allCustomers", customerService.getCustomers());
