@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>Customer</title>
 </head>
 <body>
 
-<h1 th:text="${greeting}"></h1>
+<h1 th:each="customer : ${allCustomers}" th:text="${customer}"></h1>
 
 </body>
 </html>
