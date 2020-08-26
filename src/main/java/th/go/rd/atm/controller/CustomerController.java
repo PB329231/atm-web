@@ -10,23 +10,23 @@ import java.util.ArrayList;
 
 @Controller
 public class CustomerController {
-    private ArrayList<Customer> customers = new ArrayList<>();
+    private CustomerService customerService;
+
+    public CustomerController(CustomerService customerService){
+        this.customerService =customerService;
+    }
 
     @GetMapping("/customer") //path url name
     public String getCustomerPage(Model model){
-//        ArrayList<Customer> customers = new ArrayList<>();
-//        customers.add(new Customer(1,"Peter","1234"));
-//        customers.add(new Customer(2,"Nancy","2345"));
-//        customers.add(new Customer(3,"Rick","3456"));
 
-        model.addAttribute("allCustomers",customers);
+        model.addAttribute("allCustomers",customerService.getCustomers());
         return "customer"; //return file customer.html
     }
 
-    @PostMapping("customer")
+    @PostMapping("/customer")
     public String registerCustomer(@ModelAttribute Customer customer, Model model) {
-        customers.add(customer);
-        model.addAttribute("allCustomers", customers); //
+        customerService.createCustomer(customer);
+        model.addAttribute("allCustomers", customerService.getCustomers());
         return "redirect:customer"; //จะreditrect กลับมาที่เดิม ข้อมูลจะหายไป
     }
 }
