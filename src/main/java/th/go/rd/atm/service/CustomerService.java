@@ -1,6 +1,7 @@
 package th.go.rd.atm.service;
 
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import th.go.rd.atm.data.CustomerRepository;
 import th.go.rd.atm.model.Customer;
@@ -31,7 +32,11 @@ public class CustomerService {
 //                return customer;
 //        }
 //        return null;
-        return repository.findById(id);
+        try {
+            return repository.findById(id);
+        }catch(EmptyResultDataAccessException e){
+            return null;
+        }
     }
 
     public List<Customer> getCustomers() {
