@@ -2,6 +2,7 @@ package th.go.rd.atm.service;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import th.go.rd.atm.data.CustomerRepository;
 import th.go.rd.atm.model.Customer;
 
 import javax.annotation.PostConstruct;
@@ -10,32 +11,43 @@ import java.util.List;
 
 @Service
 public class CustomerService {
+    private CustomerRepository repository;
 
-    private List<Customer> customerList; //เก็บข้อมูล customer ไว้ทุกคน
-
-    @PostConstruct
-    public void postConstruct(){
-        this.customerList = new ArrayList<>();
+    public CustomerService(CustomerRepository repository) {
+        this.repository = repository;
     }
 
     public void createCustomer(Customer customer){
         //...hash pin...
         String hashPin = hash(customer.getPin()); //เอา method hashมาใช้ โดยใส่ค่า customer ที่รับค่ามา ส่งเข้าไป
         customer.setPin(hashPin); //เซ็ทค่า pin
-        customerList.add(customer); //add customer ลงใน customerlist
+        //customerList.add(customer); //add customer ลงใน customerlist
+        repository.save(customer);
+    }
+
+    public Customer findCustomer(int id) {
+//        for (Customer customer : customerList) {
+//            if (customer.getId() == id)
+//                return customer;
+//        }
+//        return null;
+        return repository.findById(id);
     }
 
     public List<Customer> getCustomers() {
-        return new ArrayList<>(this.customerList);
+
+//        return new ArrayList<>(this.customerList);
+        return repository.findAll();
     } // คืนค่าเ็น Arraylist customer
 
-    public Customer findCustomer(int id) {
-        for (Customer customer : customerList) {
-            if (customer.getId() == id)
-                return customer;
-        }
-        return null;
-    }
+
+    //private List<Customer> customerList; //เก็บข้อมูล customer ไว้ทุกคน
+
+//    @PostConstruct
+//    public void postConstruct(){
+//        this.customerList = new ArrayList<>();
+//    }
+
 
     public Customer checkPin(Customer inputCustomer) {
         // 1. หา customer ที่มี id ตรงกับพารามิเตอร์
